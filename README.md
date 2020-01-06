@@ -6,6 +6,7 @@
 | ------ | :----------------: | ----------------------------------------------------------------------------------------------------------------------------------: |
 | Post   | /api/auth/register | Creates a user using the information sent inside the body of the request. Hash the password before saving the user to the database. |
 | Post   |  /api/auth/login   |                                                                 Gets the username and password from the body for login credentials. |
+| Get    |     /api/users     |                                                                                                Gets a list of users in the database |
 
 # Registration Schema
 
