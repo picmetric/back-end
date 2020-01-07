@@ -26,7 +26,7 @@ router.post("/signed-url", restricted, (req, res) => {
     } else {
       const returnData = {
         signedRequest: data,
-        url: `https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${filename}`
+        url: `https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${filename}.${filetype}`
       };
       // Send it all back
       return res.status(200).json({ success: true, ...returnData });
