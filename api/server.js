@@ -3,6 +3,7 @@ const sessions = require('express-session');
 const KnexSessionStore = require('connect-session-knex')(sessions);
 
 const apiRouter = require('./api-router');
+const signedUrl = require('../images/image-route');
 const configureMiddleware = require('./configure-middleware.js');
 const knex = require('../data/db-config');
 
@@ -32,5 +33,7 @@ configureMiddleware(server);
 server.use(sessions(sessionConfiguration));
 
 server.use('/api', apiRouter);
+
+server.use('/images', signedUrl);
 
 module.exports = server;

@@ -1,11 +1,14 @@
+require('dotenv').config();
 // Update with your config settings.
 
 module.exports = {
   development: {
-    client: 'sqlite3',
-    useNullAsDefault: true,
+    client: 'pg',
     connection: {
-      filename: './data/pic-metric.db3'
+      database: 'development',
+      host: '127.0.0.1',
+      password: process.env.POSTGRES_PASSWORD,
+      user: 'postgres'
     },
     migrations: {
       directory: './data/migrations'
@@ -16,18 +19,14 @@ module.exports = {
   },
 
   production: {
-    client: 'postgresql',
-    connection: {
-      database: 'my_db',
-      user: 'username',
-      password: 'password'
-    },
-    pool: {
-      min: 2,
-      max: 10
-    },
+    client: 'pg',
+    connection: process.env.DATABASE_URL,
     migrations: {
-      tableName: 'knex_migrations'
-    }
+      directory: './data/migrations'
+    },
+    seeds: {
+      directory: './data/seeds'
+    },
+    ssl: true
   }
 };
