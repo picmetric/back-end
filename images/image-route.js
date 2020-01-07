@@ -8,7 +8,7 @@ aws.config.update({
   secretAccessKey: process.env.AWS_SECRET
 });
 
-router.post("/signed-url", restricted, (req, res) => {
+router.post("/signed-url", (req, res) => {
   const s3 = new aws.S3();
   const { filename, filetype } = req.body;
   //validation
