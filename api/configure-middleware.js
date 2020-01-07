@@ -5,5 +5,13 @@ const cors = require("cors");
 module.exports = server => {
   server.use(helmet());
   server.use(express.json());
-  server.use(cors());
+  server.use(
+    cors({
+      origin: function(origin, callback) {
+        return callback(null, true);
+      },
+      optionsSuccessStatus: 200,
+      credentials: true
+    })
+  );
 };
