@@ -1,25 +1,32 @@
-const router = require("express").Router();
-const aws = require("aws-sdk");
-const restricted = require("../routers/auth/restricted-middleware");
+const router = require('express').Router();
+const aws = require('aws-sdk');
+const restricted = require('../routers/auth/restricted-middleware');
 
 aws.config.update({
-  region: "us-east-2",
+  region: 'us-east-2',
   accessKeyId: process.env.AWS_KEY,
   secretAccessKey: process.env.AWS_SECRET
 });
 
-router.post("/signed-url", restricted, (req, res) => {
+router.post('/signed-url', restricted, (req, res) => {
   const s3 = new aws.S3();
   const { filename, filetype } = req.body;
   //validation
+  if (filename && filetype) {
+    next();
+  } else {
+    return res.status(404).json({
+      Error: 'No Filename & Filetype indicated'
+    });
+  }
   const s3Params = {
     Bucket: process.env.AWS_BUCKET,
     Key: filename,
     Expires: 500,
     ContentType: filetype,
-    ACL: "public-read"
+    ACL: 'public-read'
   };
-  s3.getSignedUrl("putObject", s3Params, (error, data) => {
+  s3.getSignedUrl('putObject', s3Params, (error, data) => {
     if (error) {
       console.log(error);
       return res.status(500).json({ error });
