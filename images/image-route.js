@@ -1,4 +1,4 @@
-import axios from 'axios';
+const axios = require('axios');
 const router = require('express').Router();
 const aws = require('aws-sdk');
 const restricted = require('../routers/auth/restricted-middleware');
@@ -49,7 +49,7 @@ router.post('/', restricted, (req, res) => {
       message: 'Photo URL required'
     });
   }
-  Images.add({ user_id: req.session.user }).then(image => {
+  Images.add({ user_id: req.session.user.id }).then(image => {
     res.status(202).json({ message: 'Image being analyzed' });
 
     axios
