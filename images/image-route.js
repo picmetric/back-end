@@ -1,6 +1,8 @@
+import axios from 'axios';
 const router = require('express').Router();
 const aws = require('aws-sdk');
 const restricted = require('../routers/auth/restricted-middleware');
+const Images = require('../images/images-model');
 
 aws.config.update({
   region: 'us-east-2',
@@ -38,6 +40,23 @@ router.post('/signed-url', restricted, (req, res) => {
       // Send it all back
       return res.status(200).json({ success: true, ...returnData });
     }
+  });
+});
+
+router.post('/', restricted, (req, res) => {
+  if (!req.body.url) {
+    return res.status(400).json({
+      message: 'Photo URL required'
+    });
+  }
+  Images.add({ user_id: req.session.user }).then(image => {
+    res.status(202).json({ message: 'Image being analyzed' });
+
+    axios
+      .post('http://distortedlogic.hopto.org/api', { url: req.body.url })
+      .then(response => {
+        Images.update(image.id, { data: response.data });
+      });
   });
 });
 
