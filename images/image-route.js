@@ -1,16 +1,16 @@
-import axios from 'axios';
-const router = require('express').Router();
-const aws = require('aws-sdk');
-const restricted = require('../routers/auth/restricted-middleware');
-const Images = require('../images/images-model');
+const axios = require("axios");
+const router = require("express").Router();
+const aws = require("aws-sdk");
+const restricted = require("../routers/auth/restricted-middleware");
+const Images = require("../images/images-model");
 
 aws.config.update({
-  region: 'us-east-2',
+  region: "us-east-2",
   accessKeyId: process.env.AWS_KEY,
   secretAccessKey: process.env.AWS_SECRET
 });
 
-router.post('/signed-url', restricted, (req, res) => {
+router.post("/signed-url", restricted, (req, res) => {
   const s3 = new aws.S3();
   const { filename, filetype } = req.body;
   //validation
@@ -18,7 +18,7 @@ router.post('/signed-url', restricted, (req, res) => {
     next();
   } else {
     return res.status(404).json({
-      Error: 'No Filename & Filetype indicated'
+      Error: "No Filename & Filetype indicated"
     });
   }
   const s3Params = {
@@ -26,9 +26,9 @@ router.post('/signed-url', restricted, (req, res) => {
     Key: filename,
     Expires: 500,
     ContentType: filetype,
-    ACL: 'public-read'
+    ACL: "public-read"
   };
-  s3.getSignedUrl('putObject', s3Params, (error, data) => {
+  s3.getSignedUrl("putObject", s3Params, (error, data) => {
     if (error) {
       console.log(error);
       return res.status(500).json({ error });
@@ -43,17 +43,17 @@ router.post('/signed-url', restricted, (req, res) => {
   });
 });
 
-router.post('/', restricted, (req, res) => {
+router.post("/", restricted, (req, res) => {
   if (!req.body.url) {
     return res.status(400).json({
-      message: 'Photo URL required'
+      message: "Photo URL required"
     });
   }
   Images.add({ user_id: req.session.user }).then(image => {
-    res.status(202).json({ message: 'Image being analyzed' });
+    res.status(202).json({ message: "Image being analyzed" });
 
     axios
-      .post('http://distortedlogic.hopto.org/api', { url: req.body.url })
+      .post("http://distortedlogic.hopto.org/api", { url: req.body.url })
       .then(response => {
         Images.update(image.id, { data: response.data });
       });
