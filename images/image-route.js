@@ -1,16 +1,8 @@
-<<<<<<< HEAD
 const axios = require("axios");
 const router = require("express").Router();
 const aws = require("aws-sdk");
 const restricted = require("../routers/auth/restricted-middleware");
 const Images = require("../images/images-model");
-=======
-const axios = require('axios');
-const router = require('express').Router();
-const aws = require('aws-sdk');
-const restricted = require('../routers/auth/restricted-middleware');
-const Images = require('../images/images-model');
->>>>>>> 2ab4a3ee957919fe30fc175a2ac2052f62d3fd9e
 
 aws.config.update({
   region: "us-east-2",
@@ -50,25 +42,15 @@ router.post("/signed-url", restricted, (req, res) => {
     }
   });
 });
-<<<<<<< HEAD
-
-router.post("/", restricted, (req, res) => {
-=======
 //Adds Image
-router.post('/', restricted, (req, res) => {
->>>>>>> 2ab4a3ee957919fe30fc175a2ac2052f62d3fd9e
+router.post("/", restricted, (req, res) => {
   if (!req.body.url) {
     return res.status(400).json({
       message: "Photo URL required"
     });
   }
-<<<<<<< HEAD
-  Images.add({ user_id: req.session.user }).then(image => {
-    res.status(202).json({ message: "Image being analyzed" });
-=======
   Images.add({ user_id: req.session.user.id }).then(image => {
-    res.status(202).json({ message: 'Image being analyzed' });
->>>>>>> 2ab4a3ee957919fe30fc175a2ac2052f62d3fd9e
+    res.status(202).json({ message: "Image being analyzed" });
 
     axios
       .post("http://distortedlogic.hopto.org/api", { url: req.body.url })
@@ -76,6 +58,10 @@ router.post('/', restricted, (req, res) => {
         Images.update(image.id, { data: response.data });
       });
   });
+});
+
+router.get("/", restricted, (req, res) => {
+  console.log(req.body);
 });
 
 module.exports = router;
