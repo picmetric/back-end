@@ -51,7 +51,7 @@ router.post("/", restricted, (req, res) => {
   }
 
   axios
-    .post("http://ec2-54-144-27-51.compute-1.amazonaws.com/api", {
+    .post("http://ec2-54-163-106-75.compute-1.amazonaws.com/api", {
       url: req.body.url
     })
     .then(response => {
