@@ -49,19 +49,32 @@ router.post("/", restricted, (req, res) => {
       message: "Photo URL required"
     });
   }
-  Images.add({ user_id: req.session.user.id }).then(image => {
-    res.status(202).json({ message: "Image being analyzed" });
 
-    axios
-      .post("http://distortedlogic.hopto.org/api", { url: req.body.url })
-      .then(response => {
-        Images.update(image.id, { data: response.data });
+  axios
+    .post("http://ec2-54-144-27-51.compute-1.amazonaws.com/api", {
+      url: req.body.url
+    })
+    .then(response => {
+      Images.add({
+        user_id: req.session.user.id,
+        data: JSON.stringify(response.data)
+      }).then(image => {
+        res.status(200).json(image);
       });
-  });
+    });
 });
 
 router.get("/", restricted, (req, res) => {
-  console.log(req.body);
+  Images.findByUserId(req.session.user.id)
+    .then(images => {
+      res.status(200).json(images);
+    })
+    .catch(error => {
+      console.log(error);
+      res
+        .status(500)
+        .json({ message: "Server error fetching user's images", error });
+    });
 });
 
 module.exports = router;
