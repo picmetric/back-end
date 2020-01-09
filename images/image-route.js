@@ -77,4 +77,20 @@ router.get("/", restricted, (req, res) => {
     });
 });
 
+router.get("/:id", restricted, (req, res) => {
+  Images.findById(req.params.id)
+    .then(image => {
+      if (image.user_id !== req.session.user.id) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+      res.status(200).json(image);
+    })
+    .catch(error => {
+      console.log(error);
+      res
+        .status(500)
+        .json({ message: "Server error fetching user's images", error });
+    });
+});
+
 module.exports = router;
