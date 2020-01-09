@@ -42,7 +42,7 @@ router.post('/signed-url', restricted, (req, res) => {
     }
   });
 });
-
+//Adds Image
 router.post('/', restricted, (req, res) => {
   if (!req.body.url) {
     return res.status(400).json({
