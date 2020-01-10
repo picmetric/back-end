@@ -30,9 +30,13 @@ module.exports = {
     ssl: true
   },
   testing: {
-    client: 'sqlite3',
+    client: 'pg',
     connection: {
-      filename: './data/pic-metric.db3'
+      host: 'localhost',
+      port: 5432,
+      user: 'postgres',
+      password: process.env.POSTGRES_PASSWORD,
+      database: 'development'
     },
     useNullAsDefault: true,
     migrations: {
