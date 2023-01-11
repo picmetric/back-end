@@ -31,7 +31,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.0",
     "helmet": "^3.21.2",
-    "knex": "^0.20.6",
+    "knex": "^2.4.0",
     "pg": "^7.17.0"
   },
   "devDependencies": {
